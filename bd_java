@@ -1,0 +1,42 @@
+package br.edu.idp.disciplinas.poo2023_1;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class Main {
+
+    public static void main(String[] args) throws SQLException {
+        String paramsConexao = "jdbc:h2:mem:testdb";
+        String usuario = "";
+        String senha = "";
+        Connection conexao = DriverManager.getConnection(paramsConexao, usuario, senha);
+
+        String criacaoSql = "create table pessoa (id int primary key, nome varchar(150), qtdAcesso int, naturalidade varchar(75))";
+        Statement stmtC = conexao.createStatement();
+        stmtC.executeUpdate(criacaoSql);
+        stmtC.close();
+
+        String insercaoSql = "insert into pessoa (id, nome, qtdAcesso, naturalidade) values (1, 'João Pedro', 5, 'Brasil'), (2, 'Joanna', 10, 'Dubai')";
+        Statement stmtI = conexao.createStatement();
+        stmtI.executeUpdate(insercaoSql);
+        stmtI.close();
+
+        String consulta = "select * from pessoa";
+        Statement stmt = conexao.createStatement();
+        ResultSet resultado = stmt.executeQuery(consulta);
+
+        while (resultado.next()) {
+            int id = resultado.getInt("id");
+            String nome = resultado.getString("nome");
+            int quantidade = resultado.getInt("qtdAcesso");
+            String naturalidade = resultado.getString("naturalidade");
+
+            System.out.println("ID: " + id + ", Nome: " + nome + ", Quantidade de Acesso: " + quantidade + ", Naturalidade: " + naturalidade);
+        }
+
+        System.out.println("\nTchau, até a próxima\n\n\t\t:-)");
+    }
+}
